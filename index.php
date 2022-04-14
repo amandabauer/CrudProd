@@ -24,7 +24,6 @@ $head->addElement($title);
 $body = new Body("body");
 
 $container = new Div("container");
-
 $barra = new Div("row");
 $conteudoBarra = new Div("col bg-warning");
 $texto = new Texto("Atividade");
@@ -47,11 +46,12 @@ function object_to_array($obj) {
     }
     return $arr;
 }
-//var_dump($dados_menu);
+
 
 if (isset($_GET["pagina"])) {
     //montar a tabela de dados
-    $consulta_dados =  ("select * from menu where acao = '?pagina={$page}'");
+    $page = $_GET["pagina"];
+    $consulta_dados =  $conn->getSelect("SELECT * FROM menu WHERE acao = '?pagina={$page}'");
 
     if ($consulta_dados[0]->tipo=='lista') {
         $dados_tabela = $conn->getSelect($consulta_dados[0]->sqltabela);
@@ -96,15 +96,18 @@ $container->addElement($areaprincipal);
 
 $body->addElement($container);
 
-//$form = new Form("teste.php", "POST", "form-inline");
-//$divform = new Div("input-group mb-3");
-//$input = new Input('text','form-control','Username','Username');
-//$form->addElement($input);
-//$divform->addElement($form);
-//$div1->addElement($ul);
-//$div1->addElement($table);
-//$div1->addElement($divform);
-//$body->addElement($div1);
+
+$form = new FormPessoa("id", "nome", "email");
+$divform = new Div("input-group mb-3");
+$input = new Input('text','form-control','Username','Username');
+$form->addElementForms($input);
+$divform->addElement($form);
+$div1->addElement($ul);
+$div1->addElement($table);
+$div1->addElement($divform);
+$body->addElement($div1);
+
+$miolo->addElement($form);
 
 $table = new Table();
 $th1 = new Tr();

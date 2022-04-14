@@ -1,5 +1,5 @@
 <?php
- 
+
  class FormPessoa {
 
     private $inputs;
@@ -22,7 +22,7 @@
     }
 
     public function getSubmit(){
-        return `<button type="submit" class="btn btn-primary">Cadastrar</button>`;
+        return `<button type="submit" class="btn btn-primary" name="cadastrar">Cadastrar</button>`;
     }
 
     public function __toString() {
