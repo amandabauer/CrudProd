@@ -12,12 +12,10 @@ class Menu {
   public function __toString() {
     $menuConteudo = new Ul("list-group");
     foreach ($this->dados as $valor) {
-        $link = new Link("localhost:3000/".$valor->acao,$valor->texto,null,null);
-        $menuConteudo->addElement(new Li("list-group-item", $link));
-        
+        $link = new Link("localhost:3000/".$valor[2], $valor[1], null, null);
+        $menuConteudo->addElement(new Li("list-group-item", $link));        
     }
-     var_dump($menuConteudo);
     $this->container->addElement($menuConteudo);
-    return $this->container->__toString();
+    return "{$this->container}";
   }
 }

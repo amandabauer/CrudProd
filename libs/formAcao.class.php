@@ -1,10 +1,13 @@
 <?php
 
- class FormPessoa {
+ class FormAcao {
 
     private $inputs;
+    private $texto;
+    private $action;
 
-    public function __construct(...$campos){
+    public function __construct($texto, ...$campos){
+        $this->texto = $texto;
         $this->setInputs(...$campos);
     }
 
@@ -22,16 +25,18 @@
     }
 
     public function getSubmit(){
-        return `<button type="submit" class="btn btn-primary" name="cadastrar">Cadastrar</button>`;
+        return '<button type="submit" class="btn btn-primary" name="cadastrar">Cadastrar</button>';
     }
 
     public function __toString() {
-        $retorno = '';
-
-        $form = new Form('post', '../index.php');
+        $div = new Div('col-sm-2');
+        $text = new Texto($this->texto);
+        $form = new Form('post', $this->action);
         $form->addElementForms($this->inputs);
         $form->addElementForms($this->getSubmit());
-        return $form;
+        $div->addElement($text);
+        $div->addElement($form);
+        return "{$div}";
 
     }
 

@@ -6,6 +6,15 @@ $conn = new Conexao();
 // $result = $conn->getSelect("SELECT * FROM pessoa");
 // echo $result->nome;
 
+function object_to_array($obj) {
+    $_arr = is_object($obj) ? get_object_vars($obj) : $obj;
+    foreach ($_arr as $key => $val) {
+        $val = (is_array($val) || is_object($val)) ? object_to_array($val) : $val;
+        $arr[$key] = $val;
+    }
+    return $arr;
+}
+
 $metaCharset = new Meta("UTF-8");
 $metaHttEquiv = new Meta(null, null, "X-UA-Compatible", "IE=edge");
 $metaName = new Meta(null, "viewport", null, "width=device-width, initial-scale=1.0");
@@ -31,22 +40,18 @@ $conteudoBarra->addElement($texto);
 $barra->addElement($conteudoBarra);
 
 $areaprincipal = new Div("row");
-
-$dados_menu = $conn->getSelect("SELECT * FROM menu where tipo = 'lista'");
-$menu = new Menu(new Div("col-sm-2"),
-                $dados_menu);
-
 $miolo = new Div("col-sm-10");
 
-function object_to_array($obj) {
-    $_arr = is_object($obj) ? get_object_vars($obj) : $obj;
-    foreach ($_arr as $key => $val) {
-        $val = (is_array($val) || is_object($val)) ? object_to_array($val) : $val;
-        $arr[$key] = $val;
-    }
-    return $arr;
-}
+$dados_menu = $conn->getSelect("SELECT * FROM menu where tipo = 'lista'");
+$menu = new Menu(new Div("col-sm-2"), $dados_menu);
 
+foreach($dados_menu as $dados) {
+    $arrDados = explode(',', $dados[3]);
+    $form = new FormAcao($dados[1], ...$arrDados);
+    $divform = new Div("input-group mb-3");
+    $divform->addElement($form);
+    $miolo->addElement($divform);
+}
 
 if (isset($_GET["pagina"])) {
     //montar a tabela de dados
@@ -95,19 +100,6 @@ $container->addElement($barra);
 $container->addElement($areaprincipal);
 
 $body->addElement($container);
-
-
-$form = new FormPessoa("id", "nome", "email");
-$divform = new Div("input-group mb-3");
-$input = new Input('text','form-control','Username','Username');
-$form->addElementForms($input);
-$divform->addElement($form);
-$div1->addElement($ul);
-$div1->addElement($table);
-$div1->addElement($divform);
-$body->addElement($div1);
-
-$miolo->addElement($form);
 
 $table = new Table();
 $th1 = new Tr();
